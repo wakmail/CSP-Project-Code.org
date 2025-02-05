@@ -67,23 +67,35 @@ onEvent("addPassword", "click", function(){
   updateVault();
 });
 onEvent("removePassword", "click", function(){
-  var removingIndex = getText("removingIndex");
+  var removingIndex = getText("removingIndex")-1;
+  if(removingIndex>=0){
   removeItem(usernames,removingIndex);
   removeItem(passwords,removingIndex);
   removeItem(websites,removingIndex);
   updateVault();
+  }
 });
 onEvent("editPassword", "click", function(){
-  var removingIndex = getText("removingIndex");
-  usernames[removingIndex+1] = getText("newUsernameInput");
-  passwords[removingIndex+1] = getText("newPasswordInput");
-  usernames[removingIndex+1] = getText("newPasswordInput");
+  var removingIndex = getText("removingIndex")-1;
+  usernames[removingIndex] = getText("newUsernameInput");
+  passwords[removingIndex] = getText("newPasswordInput");
+  websites[removingIndex] = getText("newWebsiteInput");
   updateVault();
 });
 function updateVault(){
-  var temp;
-  for (var i in passwords){appendItem(temp,i+1+"\n"+"Website/App: "+websites[i]+"\n"+"Username: "+usernames[i]+"\n"+"Password: "+passwords[i]) }
+  var temp = "";
+  var i;
+  for (i = 1; i<=passwords.length;i++){temp = temp + i+"\n"+"Website/App: "+websites[i-1]+"\n"+"Username: "+usernames[i-1]+"\n"+"Password: "+passwords[i-1]+"\n" }
   setText("VaultList", temp);
+  setProperty("newPasswordInput","text","");
+  setProperty("newWebsiteInput","text","");
+  setProperty("newUsernameInput","text","");
 }
 //Checker Screen
 //Generate Screen
+
+
+
+
+
+
