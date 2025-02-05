@@ -1,15 +1,20 @@
 var user;
+var usernames = [];
+var passwords = [];
+var websites = [];
 
 //Screens
 //Login Screen
 onEvent("loginButton", "click", function(){
+  user = getText("usernameInput");
+  if(user==""){setProperty("usernameInput","placeholder","Please Enter Username")}
+  else{
   playAnim("Remove-Background-GIF.gif", 2120);
   //TODO: Figure out how to do this WITHOUT a setTimeout here. Make only the function use the timeout.
   setTimeout(function(){setScreen("homeScreen");}, 2120);
-  user = getText("usernameInput");
   setText("welcomeLabel", "Welcome, " + user + "!");
+  }
 });
-
 
 //Home Screen
 onEvent("vaultButton", "click", function(){
@@ -50,3 +55,35 @@ function playAnim(url, ms){
   showElement("image1");
   setTimeout(function(){hideElement("image1");}, ms); //after a set # of ms, stop the animation
 }
+
+
+
+
+//Vault Screen
+onEvent("addPassword", "click", function(){
+  appendItem(usernames,getText("newUsernameInput"));
+  appendItem(passwords,getText("newPasswordInput"));
+  appendItem(websites,getText("newWebsiteInput"));
+  updateVault();
+});
+onEvent("removePassword", "click", function(){
+  var removingIndex = getText("removingIndex");
+  removeItem(usernames,removingIndex);
+  removeItem(passwords,removingIndex);
+  removeItem(websites,removingIndex);
+  updateVault();
+});
+onEvent("editPassword", "click", function(){
+  var removingIndex = getText("removingIndex");
+  usernames[removingIndex+1] = getText("newUsernameInput");
+  passwords[removingIndex+1] = getText("newPasswordInput");
+  usernames[removingIndex+1] = getText("newPasswordInput");
+  updateVault();
+});
+function updateVault(){
+  var temp;
+  for (var i in passwords){appendItem(temp,i+1+"\n"+"Website/App: "+websites[i]+"\n"+"Username: "+usernames[i]+"\n"+"Password: "+passwords[i]) }
+  setText("VaultList", temp);
+}
+//Checker Screen
+//Generate Screen
