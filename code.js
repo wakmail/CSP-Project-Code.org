@@ -28,14 +28,16 @@ onEvent("checkerButton", "click", function(){
 onEvent("generateButton", "click", function(){
   setScreen("generateScreen");
 });
-
+onEvent("generateScreen2", "click", function(){
+  setScreen("generateScreen");
+});
 
 //Home Buttons
 onEvent("vaultHome", "click", function(){
   setScreen("homeScreen");
 });
 
-onEvent("checkerHome", "click", function(){
+onEvent("generateHome2", "click", function(){
   setScreen("homeScreen");
 });
 
@@ -92,6 +94,61 @@ function updateVault(){
   setProperty("newUsernameInput","text","");
 }
 //Checker Screen
+onEvent("checkStrength","click", function(){
+  setText("checkerOutput", "");
+  var password = getText("checkerInput");
+  var compromisedPasswords = getColumn("Passwords", "password");
+  var strength = checkPasswordStrength(password, compromisedPasswords);
+  setText("checkerOutput", strength);
+});
+
+function checkPasswordStrength(password, compromisedList) {
+  // Check if password is empty
+  password = password.toLowerCase();
+  if (password === "") {
+    return "Please enter a password to check";
+  }
+  
+  // Check if password is in compromised list
+  if (compromisedList.indexOf(password) !== -1) {
+    return "WARNING: This password has been compromised! Please choose a different password.";
+  }
+  
+  // Initialize score
+  var score = 0;
+  
+  // Check length
+  if (password.length < 8) {
+    return "Very Weak - Password should be at least 8 characters";
+  }
+  
+  // Check for different character types
+  if (/[A-Z]/.test(password)) {
+    score += 1; // Has uppercase
+  }
+  if (/[a-z]/.test(password)) {
+    score += 1; // Has lowercase
+  }
+  if (/[0-9]/.test(password)) {
+    score += 1; // Has numbers
+  }
+  if (/[^A-Za-z0-9]/.test(password)) {
+    score += 1; // Has special characters
+  }
+  
+  // Return strength based on score
+  switch(score) {
+    case 0:
+    case 1:
+      return "Weak - Try adding uppercase letters, numbers, and special characters";
+    case 2:
+      return "Medium - Could be stronger with more character variety (Ex: abc, 123, !@#))";
+    case 3:
+      return "Strong - Good password!";
+    case 4:
+      return "Very Strong - Excellent password!";
+  }
+}
 //Generate Screen
 
 
